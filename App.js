@@ -17,7 +17,7 @@ function LoginScreen({navigation}) {
     />
 
     {/* <StatusBar style="auto" /> */}
-    <Button title='Login'></Button>
+    <Button title='Login' onPress={()=>navigation.navigate('Home')}></Button>
     <Text style={styles.text}>Don't have an account? <Text style={{textDecorationLine: 'underline'}} onPress={()=>navigation.navigate('Register')}>Register here!</Text>
     </Text>
   </SafeAreaView>
@@ -32,12 +32,21 @@ function RegisterScreen() {
   )
 }
 
+function HomeScreen() {
+  return(
+    <SafeAreaView style={styles.container}>
+      <Text>Posts</Text>
+    </SafeAreaView>
+  )
+}
+
 export default function App() {
   return (
     <NavigationContainer> 
     <Stack.Navigator>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen}/>
+      <Stack.Screen name="Home" component={HomeScreen}/> 
 
     </Stack.Navigator>
     </NavigationContainer> 
