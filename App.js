@@ -11,12 +11,11 @@ function LoginScreen({navigation}) {
     <SafeAreaView style={styles.container}>
     <Text>Sunnyside</Text>
     <Image
-      source={{ uri: 'https://cdn.logo.com/hotlink-ok/logo-social.png',}} 
-      style={{width: 300, height: 200}}
+      source={require('./assets/sunnyside-logo.png')} 
+      //style={{width: 300, height: 200}}
         //network images require dimensions bc it doesn't know, for assets use require and it knows the metadata
     />
 
-    {/* <StatusBar style="auto" /> */}
     <Button title='Login' onPress={()=>navigation.navigate('Home')}></Button>
     <Text style={styles.text}>Don't have an account? <Text style={{textDecorationLine: 'underline'}} onPress={()=>navigation.navigate('Register')}>Register here!</Text>
     </Text>
@@ -64,4 +63,8 @@ const styles = StyleSheet.create({
   text: {
     flexDirection: 'row', //this is supposed to go on the container not the text i think
   },
+
+  image: {
+    marginBottom: 40
+  }
 });
