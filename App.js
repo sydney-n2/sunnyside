@@ -11,20 +11,25 @@ const Stack = createNativeStackNavigator();
 function LoginScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-    <Image
+      <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
+      <Image
       source={require('./assets/sunnyside-logo.png')} 
-      //style={{width: 300, height: 200}}
         //network images require dimensions bc it doesn't know, for assets use require and it knows the metadata
-    />
-    <TextInput style={styles.input} placeholder="Username or Email"/>
-    <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}/>
+      /> 
+      </View>
+      <View style={{flex: 1, gap: 10}}>
+        <TextInput style={styles.input} placeholder="Username or Email"/>
+        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}/> 
+      </View>
     {/* <Button style={styles.button} title='Login' onPress={()=>navigation.navigate('Home')}></Button>
     buttons have very limited styling, do not use  */}
+    <View style={{flex: 1, gap: 10}}>
     <Pressable style={styles.button} onPress={()=>navigation.navigate('Home')}>
       <Text>Login</Text> 
     </Pressable>
-    <Text style={styles.text}>Don't have an account? <Text style={{textDecorationLine: 'underline'}} onPress={()=>navigation.navigate('Register')}>Register here!</Text>
-    </Text>
+    <Text style={{alignSelf: 'center'}}>New user? <Text style={{textDecorationLine: 'underline'}} onPress={()=>navigation.navigate('Register')}>Register here!</Text>
+    </Text> 
+    </View> 
   </SafeAreaView>
   )
 }
@@ -33,19 +38,25 @@ function RegisterScreen({navigation}) {
   const [isChecked, setChecked] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
-          <Image source={require('./assets/sunnyside-logo.png')}/>
-          <TextInput style={styles.input} placeholder="First Name"/> 
-          <TextInput style={styles.input} placeholder="Last Name"/>
-          <TextInput style={styles.input} placeholder="Birthday"/>
-          <TextInput style={styles.input} placeholder="Phone Number"/>
-          <TextInput style={styles.input} placeholder="Email"/>
-          <TextInput style={styles.input} placeholder="Parent Email"/>
-          <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}/>
-          <Checkbox value={isChecked} onValueChange={setChecked} /> 
-          <Text>By registering, you agree to Sunnyside's Terms of Service and Privacy Policy.</Text>
-          <Pressable style={styles.button} onPress={()=>navigation.navigate('Onboarding')}>
-            <Text>Next</Text> 
-          </Pressable>
+      <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+        <Image source={require('./assets/sunnyside-logo.png')}/>
+      </View>
+      <View style={{flex: 3, gap: 5}}>
+        <TextInput style={styles.input} placeholder="First Name"/> 
+        <TextInput style={styles.input} placeholder="Last Name"/>
+        <TextInput style={styles.input} placeholder="Birthday"/>
+        <TextInput style={styles.input} placeholder="Phone Number"/>
+        <TextInput style={styles.input} placeholder="Email"/>
+        <TextInput style={styles.input} placeholder="Parent Email"/>
+        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}/>
+        <Checkbox value={isChecked} onValueChange={setChecked} /> 
+        <Text>By registering, you agree to Sunnyside's {'\n'}Terms of Service and Privacy Policy.</Text>
+      </View>
+      <View style={{flex: 1}}>
+        <Pressable style={styles.button} onPress={()=>navigation.navigate('Onboarding')}>
+          <Text>Next</Text> 
+        </Pressable>
+      </View>
     </SafeAreaView>
   )
 }
@@ -83,21 +94,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAECA6',
-    alignItems: 'center',
+    backgroundColor: '#FFF9C1',
+    alignItems: 'stretch',
     justifyContent: 'center',
-    gap: 10
-  },
-  
-  text: {
-    flexDirection: 'row', //this is supposed to go on the container not the text i think
+    gap: 10,
+    padding: 20
   },
 
-  image: {
-    marginBottom: 40 //also i dont think this did anything
-  },
-
-  button: { //view style props 
+  button: { //view style props
+    //shadows need a workaround/install something apparently (or include code for both android and ios)
     backgroundColor: '#F9C980',
     padding: 10,
     alignItems: 'center',
@@ -105,9 +110,12 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
 
-  input: { //text style, view style props--maybe not? im confused how to style this 
-    //shadows need a workaround/install something apparently (or include code for both android and ios)
+  input: { 
     backgroundColor: '#FFFFFF',
     padding: 5,
+    borderRadius: 10,
+    textAlign: 'center',
+    borderColor: '#F9C980',
+    borderWidth: 1
   }
 });
