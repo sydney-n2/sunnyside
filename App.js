@@ -61,10 +61,41 @@ function RegisterScreen({navigation}) {
   )
 }
 
-function OnboardingScreen() {
+function OnboardingScreen({navigation}) {
+  const [isChecked, setChecked] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
-      <Text> Video</Text>
+      <Text> Please take a moment to view our community guidelines: </Text>
+      <Image source={require('./assets/video-placeholder.png')} style={{alignSelf: 'center'}}/>
+      <Checkbox value={isChecked} onValueChange={setChecked} /> 
+      <Text>I agree to follow Sunnyside's community guidelines</Text>
+      <Pressable style={styles.button} onPress={()=>navigation.navigate('CreateProfile')}>
+        <Text>Register</Text> 
+      </Pressable>
+    </SafeAreaView>
+  )
+}
+
+function CreateProfileScreen({navigation}) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={{flex: 1}}>
+        <Image source={require('./assets/create-profile-sun.png')}/>
+      </View>
+      <View style={[styles.container, {flex: 4, borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: '#F9C980'}]}>
+      {/* how to make this fill the edges of the screen
+      if put outside it says can only have 1 parent element */}
+        <Image source={require('./assets/image-placeholder.png')} style={{alignSelf: 'center'}}/>
+        <TextInput style={styles.input} placeholder="Display Name"/> 
+        <TextInput style={styles.input} placeholder="Pronouns"/>
+        <TextInput style={styles.input} placeholder="Location"/>
+        <TextInput style={styles.input} placeholder="Condition(s)"/>
+        <TextInput style={styles.input} placeholder="Hospital Name"/>
+        <TextInput style={styles.input} placeholder="Interests/Hobbies"/>
+        <Pressable style={styles.buttonAlt} onPress={()=>navigation.navigate('Home')}>
+        <Text style={{fontWeight: 'bold'}}>Get Started!</Text> 
+      </Pressable>
+      </View>
     </SafeAreaView>
   )
 }
@@ -80,12 +111,14 @@ function HomeScreen() {
 export default function App() {
   return (
     <NavigationContainer> 
-    <Stack.Navigator> 
+    <Stack.Navigator screenOptions={{headerShown: false, animation: 'fade'}}> 
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen}/>
       <Stack.Screen name="Home" component={HomeScreen}/> 
+      <Stack.Screen name="Register" component={RegisterScreen}/>
       <Stack.Screen name="Onboarding" component={OnboardingScreen}/> 
-{/* need to make the navigator bar thing disappear later */}
+      <Stack.Screen name="CreateProfile" component={CreateProfileScreen}/> 
+
+{/* extra: can do animations for specific screens*/}
     </Stack.Navigator>
     </NavigationContainer> 
   );
@@ -107,7 +140,8 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20
+    borderRadius: 20,
+    marginHorizontal: 25
   },
 
   input: { 
@@ -117,5 +151,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderColor: '#F9C980',
     borderWidth: 1
+  },
+
+  buttonAlt: {
+    backgroundColor: '#D1FFC6',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    marginHorizontal: 50
   }
 });
