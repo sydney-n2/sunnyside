@@ -1,2 +1,2 @@
 # sunnyside
- ENGR170 Healtech Team BearCare's app project - Sunnyside 
+ ENGR170 Healthtech Team BearCare's app project - Sunnyside 
