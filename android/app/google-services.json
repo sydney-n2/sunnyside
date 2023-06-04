@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "999041877371",
+    "project_id": "sunnyside-e339f",
+    "storage_bucket": "sunnyside-e339f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999041877371:android:57ff00db4ed75afd24e9de",
+        "android_client_info": {
+          "package_name": "com.sunnyside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999041877371-d4e01eacvb27pp7vvo1ch0qe4dsglbbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2pulPx5eGn-PDQ6ow48BvW1s2yCMlbJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999041877371-d4e01eacvb27pp7vvo1ch0qe4dsglbbg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

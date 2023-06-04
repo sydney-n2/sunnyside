@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "yourscheme",
     "name": "sunnyside",
     "slug": "sunnyside",
     "version": "1.0.0",
@@ -25,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dfa4b756-fbb6-4985-bb62-54ab7d2349d4"
+      }
     }
   }
 }

@@ -2,13 +2,48 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Checkbox from 'expo-checkbox';
-import * as React from 'react'; //wtf does this do if i have to import useState below??? 
-import {useState} from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TextInput, SafeAreaView, TouchableWithoutFeedback, TouchableHighlight, Pressable} from 'react-native';
+import * as React from 'react'; //wtf does this do if i have to import useState below? 
+import {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, TextInput, SafeAreaView, TouchableWithoutFeedback, TouchableHighlight, Pressable, Button} from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const Stack = createNativeStackNavigator();
 
 function LoginScreen({navigation}) {
+  const [token, setToken] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: '16392921631-fhe9iup4mjvi73f8u4kkf7605mgfj260.apps.googleusercontent.com',
+    iosClientId: '16392921631-cgm2np4r06qv86ognkuut3lenu2c17uo.apps.googleusercontent.com',
+    expoClientId: '16392921631-cfto1mbb8np4lt6vjras0f4q9gsv69t4.apps.googleusercontent.com',
+  });
+  useEffect(() => {
+    if (response?.type === "success") {
+      setToken(response.authentication.accessToken);
+      getUserInfo();
+    }
+  }, [response, token]);
+
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      setUserInfo(user);
+    } catch (error) {
+      // Add your own error handler here
+      alert("Sign in with Google failed. Please try again")
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
@@ -27,6 +62,13 @@ function LoginScreen({navigation}) {
     <Pressable style={styles.button} onPress={()=>navigation.navigate('Home')}>
       <Text>Login</Text> 
     </Pressable>
+     <Button
+        title="Sign in with Google"
+        disabled={!request}
+         onPress={() => {
+          promptAsync();
+        }}
+      />         
     <Text style={{alignSelf: 'center'}}>New user? <Text style={{textDecorationLine: 'underline'}} onPress={()=>navigation.navigate('Register')}>Register here!</Text>
     </Text> 
     </View> 
@@ -82,11 +124,12 @@ function CreateProfileScreen({navigation}) {
       <View style={{flex: 1}}>
         <Image source={require('./assets/create-profile-sun.png')}/>
       </View>
-      <View style={[styles.container, {flex: 4, borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: '#F9C980'}]}>
+      <View style={[styles.container, {flex: 4, borderTopLeftRadius: 20, borderTopRightRadius: 20, backgroundColor: '#F9C980', 
+      margin: -20, marginTop: 10,}]}>
       {/* how to make this fill the edges of the screen
       if put outside it says can only have 1 parent element */}
         <Image source={require('./assets/image-placeholder.png')} style={{alignSelf: 'center'}}/>
-        <TextInput style={styles.input} placeholder="Display Name"/> 
+        <TextInput style={[styles.input, {marginTop: 40}]} placeholder="Display Name"/> 
         <TextInput style={styles.input} placeholder="Pronouns"/>
         <TextInput style={styles.input} placeholder="Location"/>
         <TextInput style={styles.input} placeholder="Condition(s)"/>
@@ -100,10 +143,218 @@ function CreateProfileScreen({navigation}) {
   )
 }
 
-function HomeScreen() {
+function HomeScreen({navigation}) {
   return(
     <SafeAreaView style={styles.container}>
-      <Text>Posts</Text>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <ScrollView style={styles.content}>
+        <Text>Check on your friends!</Text>
+        <View style={styles.post}> 
+          <Image source={require('./assets/pfp.png')}/>
+          <Text> Sally is feeling: </Text>
+        </View>
+        <View style={styles.post}> 
+          <Image source={require('./assets/pfp.png')}/>
+          <Text> Sally is feeling: </Text>
+        </View>
+        <View style={styles.post}> 
+          <Image source={require('./assets/pfp.png')}/>
+          <Text> Sally is feeling: </Text>
+        </View>
+        <View style={styles.post}> 
+          <Image source={require('./assets/pfp.png')}/>
+          <Text> Sally is feeling: </Text>
+        </View>
+        <View style={styles.post}> 
+          <Image source={require('./assets/pfp.png')}/>
+          <Text> Sally is feeling: </Text>
+        </View>
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+function CommunitiesScreen ({navigation}) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+function IslandScreen ({navigation}){
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+function MessagesScreen ({navigation}){
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+function EventsScreen ({navigation}){
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+function ProfileScreen ({navigation}){
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Pressable onPress={()=>navigation.navigate('Profile')}> 
+          <Image source={require('./assets/pfp.png')} style={{objectFit: 'scale-down', height: 40, marginBottom: 5, marginRight: '100%', marginLeft: -15}}/>
+        </Pressable>
+        <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
+        <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable onPress={()=>navigation.navigate('Home')}>
+          <Image source={require('./assets/home-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Communities')}>
+          <Image source={require('./assets/communities-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Island')}>
+          <Image source={require('./assets/island-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Messages')}>
+          <Image source={require('./assets/messages-icon.png')}/>
+        </Pressable>
+        <Pressable onPress={()=>navigation.navigate('Events')}>
+          <Image source={require('./assets/events-icon.png')}/>
+        </Pressable>
+      </View>
     </SafeAreaView>
   )
 }
@@ -117,6 +368,11 @@ export default function App() {
       <Stack.Screen name="Register" component={RegisterScreen}/>
       <Stack.Screen name="Onboarding" component={OnboardingScreen}/> 
       <Stack.Screen name="CreateProfile" component={CreateProfileScreen}/> 
+      <Stack.Screen name="Communities" component={CommunitiesScreen}/>
+      <Stack.Screen name="Island" component={IslandScreen}/>
+      <Stack.Screen name="Messages" component={MessagesScreen}/>
+      <Stack.Screen name="Events" component={EventsScreen}/>
+      <Stack.Screen name="Profile" component={ProfileScreen}/>
 
 {/* extra: can do animations for specific screens*/}
     </Stack.Navigator>
@@ -132,6 +388,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 10,
     padding: 20
+  },
+
+  header: {
+    backgroundColor: '#F9C980',
+    flex: .15,
+    marginHorizontal: -20,
+    marginTop: -20,
+    paddingBottom: 10,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+  },
+
+  content: {
+    flex: .8,
+    paddingVertical: 5,
+  },
+
+  footer: {
+    backgroundColor: '#F9C980',
+    flex: .12,
+    marginHorizontal: -20,
+    marginBottom: -20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
 
   button: { //view style props
@@ -160,5 +442,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     marginHorizontal: 50
+  },
+
+  post: {
+    borderColor: '#000000',
+    borderWidth: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    marginVertical: 10,
   }
 });
