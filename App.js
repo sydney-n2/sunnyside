@@ -1,12 +1,12 @@
-//import { StatusBar } from 'expo-status-bar';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Checkbox from 'expo-checkbox';
-import * as React from 'react'; //wtf does this do if i have to import useState below? 
+import * as React from 'react'; 
 import {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TextInput, SafeAreaView, TouchableWithoutFeedback, TouchableHighlight, Pressable, Button} from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import { FAB, SearchBar, Tab, TabView, Overlay} from '@rneui/themed'; 
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -24,6 +24,7 @@ function LoginScreen({navigation}) {
     if (response?.type === "success") {
       setToken(response.authentication.accessToken);
       getUserInfo();
+      navigation.navigate('Home');
     }
   }, [response, token]);
 
@@ -47,17 +48,12 @@ function LoginScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{flex: 4, justifyContent: 'center', alignItems:'center'}}>
-      <Image
-      source={require('./assets/sunnyside-logo.png')} 
-        //network images require dimensions bc it doesn't know, for assets use require and it knows the metadata
-      /> 
+      <Image source={require('./assets/sunnyside-logo.png')} /> 
       </View>
       <View style={{flex: 1, gap: 10}}>
         <TextInput style={styles.input} placeholder="Username or Email"/>
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}/> 
       </View>
-    {/* <Button style={styles.button} title='Login' onPress={()=>navigation.navigate('Home')}></Button>
-    buttons have very limited styling, do not use  */}
     <View style={{flex: 1, gap: 10}}>
     <Pressable style={styles.button} onPress={()=>navigation.navigate('Home')}>
       <Text>Login</Text> 
@@ -80,6 +76,8 @@ function RegisterScreen({navigation}) {
   const [isChecked, setChecked] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
+      <FAB title="Back" color="#F9C980" size='small' titleStyle={{color: 'black', fontWeight:'normal'}} 
+      style={{alignSelf: 'flex-start', marginTop: 30}} onPress={()=>navigation.goBack()}/>
       <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
         <Image source={require('./assets/sunnyside-logo.png')}/>
       </View>
@@ -94,7 +92,7 @@ function RegisterScreen({navigation}) {
         <Checkbox value={isChecked} onValueChange={setChecked} /> 
         <Text>By registering, you agree to Sunnyside's {'\n'}Terms of Service and Privacy Policy.</Text>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, paddingTop: 20}}>
         <Pressable style={styles.button} onPress={()=>navigation.navigate('Onboarding')}>
           <Text>Next</Text> 
         </Pressable>
@@ -155,26 +153,46 @@ function HomeScreen({navigation}) {
       </View>
 
       <ScrollView style={styles.content}>
-        <Text>Check on your friends!</Text>
-        <View style={styles.post}> 
-          <Image source={require('./assets/pfp.png')}/>
-          <Text> Sally is feeling: </Text>
+        <Text style={{fontWeight: 'bold', alignSelf:'center', fontSize: 20}}>Check on your friends!</Text>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
         </View>
-        <View style={styles.post}> 
-          <Image source={require('./assets/pfp.png')}/>
-          <Text> Sally is feeling: </Text>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
         </View>
-        <View style={styles.post}> 
-          <Image source={require('./assets/pfp.png')}/>
-          <Text> Sally is feeling: </Text>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
         </View>
-        <View style={styles.post}> 
-          <Image source={require('./assets/pfp.png')}/>
-          <Text> Sally is feeling: </Text>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
         </View>
-        <View style={styles.post}> 
-          <Image source={require('./assets/pfp.png')}/>
-          <Text> Sally is feeling: </Text>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
+        </View>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
+        </View>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
+        </View>
+        <View style={[styles.post, {padding: 10, flexDirection: 'row'}]}> 
+          <Image source={require('./assets/other-pfp.png')} style={{marginRight: 10}}/>
+          <Text style={{fontWeight:'bold'}}> Roo is feeling: {'\n'} 
+          <Text style={{fontWeight: 'normal'}}> Ready for demo day!</Text></Text>
         </View>
       </ScrollView>
 
@@ -194,12 +212,26 @@ function HomeScreen({navigation}) {
         <Pressable onPress={()=>navigation.navigate('Events')}>
           <Image source={require('./assets/events-icon.png')}/>
         </Pressable>
+        <FAB
+        visible={true}
+        icon={{ name: 'add', color: 'white' }}
+        color="#F9C980"
+        placement='right'
+        size='large'
+        style={{bottom: 75}}
+        />
       </View>
     </SafeAreaView>
   )
 }
 
 function CommunitiesScreen ({navigation}) {
+  const [index, setIndex] = React.useState(0);
+  const [search, setSearch] = useState("")
+  const updateSearch = (search) => {
+    setSearch(search);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -209,6 +241,32 @@ function CommunitiesScreen ({navigation}) {
         <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
         <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
       </View>
+
+      <Tab value={index} onChange={(e)=> setIndex(e)} variant='primary' indicatorStyle={{height: 0}}>
+        <Tab.Item title="For You" titleStyle={{color: 'black'}}
+          containerStyle={(active) => ({
+            backgroundColor: active ? "#A7D7B2" : "#BEF5CB",
+          })}/>
+        <Tab.Item title="Communities" titleStyle={{color: 'black'}}
+          containerStyle={(active) => ({
+            backgroundColor: active ? "#A7D7B2" : "#BEF5CB",
+          })}/>
+      </Tab>
+      <TabView value={index} onChange={setIndex}>
+        <TabView.Item style={{width: '100%'}}>
+          <SearchBar
+          placeholder="Search..."
+          onChangeText={updateSearch}
+          value={search}
+          containerStyle={{backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0}}
+          inputContainerStyle={{backgroundColor:'white', borderRadius: 50, height: 30, width: '90%', alignSelf: 'center'}}
+          />
+        </TabView.Item>
+        <TabView.Item style={{width: '100%'}}>
+          <Image source={require('./assets/communities-ss.png')}/>
+        </TabView.Item>
+
+      </TabView>
 
       <View style={styles.footer}>
         <Pressable onPress={()=>navigation.navigate('Home')}>
@@ -240,6 +298,10 @@ function IslandScreen ({navigation}){
         </Pressable>
         <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
         <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={[styles.content, {backgroundColor: '#B7EDF9', margin: -20}]}>
+        <Image source={require('./assets/island-assets.png')}/>
       </View>
 
       <View style={styles.footer}>
@@ -274,6 +336,10 @@ function MessagesScreen ({navigation}){
         <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
       </View>
 
+      <View style={[styles.content, {backgroundColor: '#FFF9C1', margin: -20, alignItems: 'center', justifyContent: 'center'}]}>
+        <Image source={require('./assets/messages-asset.png')}/>
+      </View>
+
       <View style={styles.footer}>
         <Pressable onPress={()=>navigation.navigate('Home')}>
           <Image source={require('./assets/home-icon.png')}/>
@@ -296,6 +362,11 @@ function MessagesScreen ({navigation}){
 }
 
 function EventsScreen ({navigation}){
+  const [search, setSearch] = useState("");
+
+  const updateSearch = (search) => {
+    setSearch(search);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -305,6 +376,54 @@ function EventsScreen ({navigation}){
         <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
         <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
       </View>
+
+      <View>
+        <Text style={{fontSize: 20}}> Activities Near You</Text>
+        <SearchBar
+          placeholder="Search..."
+          onChangeText={updateSearch}
+          value={search}
+          containerStyle={{backgroundColor: 'transparent', borderTopWidth: 0, borderBottomWidth: 0}}
+          inputContainerStyle={{backgroundColor:'white', borderRadius: 50, height: 30}}
+        />
+        <Text style={{fontSize: 20}}>Upcoming...</Text>
+      </View>
+      <ScrollView style={{flex: .6}}>
+        <View style={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-around'}}>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+          <View style={[styles.post, {width: '40%', height: 150, padding: 5, alignItems: 'center', justifyContent: 'center'}]}>
+            <Text>Demo Day</Text>
+            <Text>Fri, 9 June 2023</Text>
+          </View>
+        </View>
+      </ScrollView>
 
       <View style={styles.footer}>
         <Pressable onPress={()=>navigation.navigate('Home')}>
@@ -322,6 +441,14 @@ function EventsScreen ({navigation}){
         <Pressable onPress={()=>navigation.navigate('Events')}>
           <Image source={require('./assets/events-icon.png')}/>
         </Pressable>
+        <FAB
+        visible={true}
+        icon={{ name: 'add', color: 'white' }}
+        color="#F9C980"
+        placement='right'
+        size='large'
+        style={{bottom: 75}}
+        />
       </View>
     </SafeAreaView>
   )
@@ -336,6 +463,10 @@ function ProfileScreen ({navigation}){
         </Pressable>
         <Image source={require('./assets/accessibility-icon.png')} style={{marginLeft: 'auto', marginBottom: 5, marginRight: 15}}/>
         <Image source={require('./assets/notifications-bell.png')} style={{objectFit: 'scale-down', height: 35, marginBottom: 5, marginRight: 30}}/>
+      </View>
+
+      <View style={[styles.content, {backgroundColor: '#FFF9C1', margin: -20, alignItems: 'center', justifyContent: 'center'}]}>
+        <Image source={require('./assets/edit-profile-asset.png')}/>
       </View>
 
       <View style={styles.footer}>
@@ -416,7 +547,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
 
-  button: { //view style props
+  button: { 
     //shadows need a workaround/install something apparently (or include code for both android and ios)
     backgroundColor: '#F9C980',
     padding: 10,
